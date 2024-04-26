@@ -5,6 +5,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image:url(../public/1.png);
+  background-repeat: repeat-x;
+   background-size: auto 100%;
+   background-attachment: fixed;
 }
 
 code {
