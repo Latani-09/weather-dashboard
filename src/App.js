@@ -11,6 +11,7 @@ function App() {
 
   return (
     <div className="App">
+      <h5 style={{color:"white", marginTop:'30px'}}><img  src='./icons/weather.png'></img>Weather App</h5>
       <Routes>
         {AppRoutes.map((route,index)=>{
           const {element,...rest}=route;
