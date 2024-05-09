@@ -1,5 +1,5 @@
-import CityWeather from "./CityWeather";
-import WeatherDashboard from "./WeatherDashboard";
+import CityWeather from "./components/CityWeather/index";
+import WeatherDashboard from "./components/WeatherDashboard/index";
 
 const AppRoutes=[
     {index:true,

@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { fetchWeather } from "./services";
-import { formatTime, getDateTime } from "./DateTimeHelper";
+import { fetchWeather } from "../../services/services";
+import { formatTime, getDateTime } from "../../utils/DateTimeHelper";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 

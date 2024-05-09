@@ -1,70 +1,10 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./style.css";
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchWeather } from "./services";
-import {formatTime,getDateTime} from  './DateTimeHelper'
+import {formatTime,getDateTime} from '../../utils/DateTimeHelper';
+import { colors } from "../../constants/constant";
+ const weatherCard=({city,index})=>{
 
-const WeatherDashboard = () => {
-  const [Weather, setWeather] = useState("");
-  const [isLoading, setIsloading] = useState(true);
-  const colors = [
-    "rgb(156, 58, 58)",
-    "rgb(222, 148, 90)",
-    "rgb(64, 182, 129)",
-    "rgb(56, 110, 231)",
-    "rgb(98, 73, 204)",
-  ];
-
-  const loadData = async () => {
-    const cityData = require("./cities.json"); //read json data from file
-    const cityCodes = []; //intialize
-    cityData.List.forEach((city) => {
-      cityCodes.push(city.CityCode);
-    });
-    let ids = cityCodes.join(",");
-    let cachedData = localStorage.getItem("weatherData");
-
-    let jsonData = JSON.parse(cachedData);
-    
-    if (
-      jsonData &&
-      parseInt(jsonData.cachedTime) + 5 * 60 >
-        Math.floor(new Date().getTime() / 1000)
-    ) {
-      setWeather(jsonData.data);
-      setIsloading(false);
-    } else {
-      let weatherData = await fetchWeather(ids);
-      if (weatherData) {
-        localStorage.setItem(
-          "weatherData",
-          JSON.stringify({
-            cachedTime: Math.floor(new Date().getTime() / 1000).toString(),
-            data: weatherData,
-          })
-        );
-        setWeather(weatherData);
-        setIsloading(false);
-      }
-    }
-  };
-  useEffect(() => {
-    loadData();
-  }, []);
-
-
-  if (isLoading) return <div className="Loading">Loading...</div>;
-  if (Weather === "") {
-    return null;
-  }
-  return (
-    <div>
-      <div className=" container dashboard">
-        <div className="row">
-          {Weather &&
-            Weather.map((city, index) => (
-              <div
+    return<>
+            <div
                 className="col-lg-5 col-md-5 col-sm-11 col-11  weathercard"
                 style={{ margin: "20px 20px", padding: "5px" }}
               >
@@ -194,11 +134,8 @@ const WeatherDashboard = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-export default WeatherDashboard;
+              </div></>
+
+}
+
+export default weatherCard;

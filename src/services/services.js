@@ -10,7 +10,7 @@ const  fetchWeather=async(ids)=>{
   
         }
   catch(e){
-    console.log(e.message)
+    
     return e.message;
   }
   finally{
