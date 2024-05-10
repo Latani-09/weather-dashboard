@@ -4,13 +4,17 @@ import { fetchWeather } from "../../services/fetchWeatherServices";
 import WeatherModel from "../../models/Weather";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
-import { cacheExpirationTimeMin, storageKey,openWeatherIconURL } from "../../constants/constant";
+import {
+  cacheExpirationTimeMin,
+  storageKey,
+  openWeatherIconURL,
+} from "../../constants/constant";
 export default function CityWeather() {
   const [cityWeatherData, setCityWeather] = useState();
   const [isLoading, setIsloading] = useState(true);
   const id = useParams();
   const loadCityData = async (id) => {
-    const storageId_city = storageKey+ id.CityID;
+    const storageId_city = storageKey + id.CityID;
     const cachedListData = JSON.parse(localStorage.getItem(storageKey));
     const cachedCityData = JSON.parse(localStorage.getItem(storageId_city));
 
@@ -84,7 +88,11 @@ export default function CityWeather() {
                   <div className="row ">
                     <div className="col-12 desc-img-view">
                       <img
-                        src={openWeatherIconURL+cityWeatherData.weatherIcon+'.png'}
+                        src={
+                          openWeatherIconURL +
+                          cityWeatherData.weatherIcon +
+                          ".png"
+                        }
                         alt="weather icon"
                       ></img>
                     </div>

@@ -6,10 +6,7 @@ import getCityCodes from "../../utils/CityCodeUtils";
 import cityData from "../../assets/cities.json";
 import "./index.css";
 import WeatherModel from "../../models/Weather";
-import {
-  storageKey,
-  cacheExpirationTimeMin,
-} from "../../constants/constant";
+import { storageKey, cacheExpirationTimeMin } from "../../constants/constant";
 const WeatherDashboard = () => {
   const [Weather, setWeather] = useState("");
   const [isLoading, setIsloading] = useState(true);
