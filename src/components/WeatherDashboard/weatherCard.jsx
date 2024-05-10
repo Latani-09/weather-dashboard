@@ -3,7 +3,7 @@ import { colors } from "../../constants/constant";
 import "./index.css";
 
 const WeatherCard = ({ city, index }) => {
-  console.log("city", city);
+
   return (
     <>
       <div className="col-lg-5 col-md-5 col-sm-11 col-11  weather-card">
