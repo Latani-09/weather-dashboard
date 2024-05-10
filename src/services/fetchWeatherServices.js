@@ -1,6 +1,6 @@
 const fetchWeather = async (ids) => {
   const apiKey = process.env.REACT_APP_WEATHERAPPID;
-  console.log(apiKey);
+
 
   try {
 

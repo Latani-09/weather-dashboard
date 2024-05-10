@@ -13,22 +13,21 @@ const WeatherDashboard = () => {
   const loadData = async () => {
     let ids = cityCodes.join(",");
     let cachedData = localStorage.getItem("weatherData");
-
+    debugger
     let jsonData = JSON.parse(cachedData);
     if (
       jsonData&&Array.isArray(jsonData.data) &&
       parseInt(jsonData.cachedTime) + 5 * 60 >
         Math.floor(new Date().getTime() / 1000)
     ) {
-      console.log("weather data ", jsonData.data);
-
+      debugger
       const weatherData = jsonData.data;
       setWeather(weatherData);
       setIsloading(false);
     } else {
       let weatherDataReceived = await fetchWeather(ids);
       if (Array.isArray(weatherDataReceived)){
-      console.log('received',weatherDataReceived )
+      
       const weatherData = weatherDataReceived.map(item => new WeatherModel(item));
       
       if (weatherData) {
@@ -48,7 +47,7 @@ const WeatherDashboard = () => {
   };}
   useEffect(() => {
     loadData();
-    console.log("weather", Weather);
+
   }, []);
 
   if (isLoading) return <div className="Loading">Loading...</div>;
