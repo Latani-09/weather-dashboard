@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { colors } from "../../constants/constant";
 import "./index.css";
 
 const WeatherCard = ({ city, index }) => {
