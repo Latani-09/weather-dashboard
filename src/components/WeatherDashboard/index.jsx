@@ -6,51 +6,72 @@ import getCityCodes from "../../utils/CityCodeUtils";
 import cityData from "../../assets/cities.json";
 import "./index.css";
 import WeatherModel from "../../models/Weather";
+import {
+  storageKey,
+  cacheExpirationTimeMin,
+} from "../../constants/constant";
 const WeatherDashboard = () => {
   const [Weather, setWeather] = useState("");
   const [isLoading, setIsloading] = useState(true);
   const cityCodes = getCityCodes(cityData);
+
   const loadData = async () => {
     let ids = cityCodes.join(",");
-    let cachedData = localStorage.getItem("weatherData");
-    debugger
+    let cachedData = localStorage.getItem(storageKey);
+
     let jsonData = JSON.parse(cachedData);
     if (
-      jsonData&&Array.isArray(jsonData.data) &&
-      parseInt(jsonData.cachedTime) + 5 * 60 >
+      jsonData &&
+      Array.isArray(jsonData.data) &&
+      parseInt(jsonData.cachedTime) + cacheExpirationTimeMin >
         Math.floor(new Date().getTime() / 1000)
     ) {
-      debugger
       const weatherData = jsonData.data;
       setWeather(weatherData);
       setIsloading(false);
     } else {
       let weatherDataReceived = await fetchWeather(ids);
-      if (Array.isArray(weatherDataReceived)){
-      
-      const weatherData = weatherDataReceived.map(item => new WeatherModel(item));
-      
-      if (weatherData) {
-        localStorage.setItem(
-          "weatherData",
-          JSON.stringify({
-            cachedTime: Math.floor(new Date().getTime() / 1000).toString(),
-            data: weatherData,
-          })
+      if (Array.isArray(weatherDataReceived)) {
+        const weatherData = weatherDataReceived.map(
+          (item) => new WeatherModel(item)
         );
-        setWeather(weatherData);
+
+        if (weatherData) {
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              cachedTime: Math.floor(new Date().getTime() / 1000).toString(),
+              data: weatherData,
+            })
+          );
+          setWeather(weatherData);
+          setIsloading(false);
+        }
+      } else {
         setIsloading(false);
+        return (
+          <div>
+            <div className=" container dashboard">
+              <div>Error fetching data</div>
+            </div>
+          </div>
+        );
       }
     }
-    else {setIsloading(false);
-    return(<div className="Loading">Error fetching data</div>)}
-  };}
+  };
   useEffect(() => {
     loadData();
-
   }, []);
 
-  if (isLoading) return <div className="Loading">Loading...</div>;
+  if (isLoading)
+    return (
+      <div>
+        <div className=" container dashboard">
+          {" "}
+          <div className="Loading">Loading...</div>
+        </div>
+      </div>
+    );
   if (Weather === "") {
     return null;
   }

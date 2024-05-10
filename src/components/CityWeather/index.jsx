@@ -4,14 +4,15 @@ import { fetchWeather } from "../../services/fetchWeatherServices";
 import WeatherModel from "../../models/Weather";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
+import { cacheExpirationTimeMin, storageKey,openWeatherIconURL } from "../../constants/constant";
 export default function CityWeather() {
   const [cityWeatherData, setCityWeather] = useState();
   const [isLoading, setIsloading] = useState(true);
   const id = useParams();
   const loadCityData = async (id) => {
-    const storageId = "weatherData" + id.CityID;
-    const cachedListData = JSON.parse(localStorage.getItem("weatherData"));
-    const cachedCityData = JSON.parse(localStorage.getItem(storageId));
+    const storageId_city = storageKey+ id.CityID;
+    const cachedListData = JSON.parse(localStorage.getItem(storageKey));
+    const cachedCityData = JSON.parse(localStorage.getItem(storageId_city));
 
     if (cachedCityData && isFreshData(cachedCityData)) {
       setCityWeather(cachedCityData.data);
@@ -33,7 +34,7 @@ export default function CityWeather() {
       const weatherData = new WeatherModel(cityWeatherDataReceived[0]);
       if (weatherData) {
         localStorage.setItem(
-          storageId,
+          storageId_city,
           JSON.stringify({
             cachedTime: Math.floor(new Date().getTime() / 1000).toString(),
             data: weatherData,
@@ -50,7 +51,7 @@ export default function CityWeather() {
 
   const isFreshData = (data) => {
     return (
-      parseInt(data.cachedTime) + 5 * 60 >
+      parseInt(data.cachedTime) + cacheExpirationTimeMin >
       Math.floor(new Date().getTime() / 1000)
     );
   };
@@ -83,7 +84,7 @@ export default function CityWeather() {
                   <div className="row ">
                     <div className="col-12 desc-img-view">
                       <img
-                        src={`http://openweathermap.org/img/wn/${cityWeatherData.weatherIcon}.png`}
+                        src={openWeatherIconURL+cityWeatherData.weatherIcon+'.png'}
                         alt="weather icon"
                       ></img>
                     </div>
