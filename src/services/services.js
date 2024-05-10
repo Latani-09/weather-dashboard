@@ -1,6 +1,10 @@
 const fetchWeather = async (ids) => {
+  const apiKey = process.env.REACT_APP_WEATHERAPPID;
+  console.log(apiKey);
+  
   try {
-    let url = `https://api.openweathermap.org/data/2.5/group?id=${ids}&units=metric&appid=61513b8d8615d88c740dc427bb4d3c28`;
+
+    let url = `https://api.openweathermap.org/data/2.5/group?id=${ids}&units=metric&appid=${apiKey}`;
     let response = await fetch(url);
     let data = await response.json();
     return data.list;

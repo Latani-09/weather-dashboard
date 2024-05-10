@@ -49,3 +49,27 @@
   display: table;
   margin: 0 auto;
 }
+
+a {
+  text-decoration: none;
+  color: white;
+}
+a:hover {
+  color: rgb(172, 194, 197);
+}
+
+.bg-color-1 {
+  background-color: rgb(156, 58, 58);
+}
+.bg-color-2 {
+  background-color: rgb(222, 148, 90);
+}
+.bg-color-3 {
+  background-color: rgb(64, 182, 129);
+}
+.bg-color-4 {
+  background-color: rgb(56, 110, 231);
+}
+.bg-color-5 {
+  background-color: rgb(98, 73, 204);
+}

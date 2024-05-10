@@ -1,11 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../style/style.css";
 import { useState, useEffect } from "react";
 import { fetchWeather } from "../../services/services";
 import WeatherCard from "./WeatherCard";
 import getCityCodes from "../../utils/CityCodeUtils";
 import cityData from "../../assets/cities.json";
-import './index.css'
+import "./index.css";
 const WeatherDashboard = () => {
   const [Weather, setWeather] = useState("");
   const [isLoading, setIsloading] = useState(true);
@@ -17,10 +16,12 @@ const WeatherDashboard = () => {
     let jsonData = JSON.parse(cachedData);
 
     if (
-      Array.isArray(jsonData.data)&&
+      Array.isArray(jsonData.data) &&
       parseInt(jsonData.cachedTime) + 5 * 60 >
         Math.floor(new Date().getTime() / 1000)
     ) {
+      console.log("weather data ", jsonData.data);
+      // const weatherData = jsonData.data.map(item => new WeatherModel(item));
       setWeather(jsonData.data);
       setIsloading(false);
     } else {
@@ -40,7 +41,7 @@ const WeatherDashboard = () => {
   };
   useEffect(() => {
     loadData();
-    console.log('weather' ,Weather)
+    console.log("weather", Weather);
   }, []);
 
   if (isLoading) return <div className="Loading">Loading...</div>;

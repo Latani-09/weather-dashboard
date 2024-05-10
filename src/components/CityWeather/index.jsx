@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { fetchWeather } from "../../services/services";
 import { formatTime, getDateTime } from "../../utils/DateTimeHelper";
 import "bootstrap/dist/css/bootstrap.min.css";
-import './index.css'
+import "./index.css";
 export default function CityWeather() {
   const [cityWeatherData, setCityWeather] = useState();
   const [isLoading, setIsloading] = useState(true);
@@ -60,18 +60,10 @@ export default function CityWeather() {
       <>
         <div className="container">
           <div className="row ">
-            <div
-              className="col sm-12 col-md-10 weather-view"
-             
-            >
+            <div className="col sm-12 col-md-10 weather-view">
               <Link to="/">
                 <div className="row">
-                  <button className="button-style"
-                   
-                  >
-                    {" "}
-                    &larr;
-                  </button>
+                  <button className="button-style"> &larr;</button>
                 </div>
               </Link>
               <div className="row">
@@ -83,14 +75,11 @@ export default function CityWeather() {
                 <p>{getDateTime(cityWeatherData.dt)}</p>
               </div>
 
-              <div className="row " >
+              <div className="row ">
                 <div className="col-1"></div>
-                <div className="col-5 " >
+                <div className="col-5 ">
                   <div className="row ">
-                    <div
-                      className="col-12 desc-img-view"
-                    
-                    >
+                    <div className="col-12 desc-img-view">
                       <img
                         src={`http://openweathermap.org/img/wn/${cityWeatherData.weather[0].icon}.png`}
                         alt="weather icon"
@@ -98,16 +87,13 @@ export default function CityWeather() {
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col-12 desc" >
+                    <div className="col-12 desc">
                       <p>{cityWeatherData.weather[0].description}</p>
                     </div>
                   </div>
                 </div>
 
-                <div
-                  className="col-5 temp-view"
-                 
-                >
+                <div className="col-5 temp-view">
                   <h1>
                     {String(cityWeatherData.main.temp).split(".")[0] + "\u2103"}
                   </h1>
@@ -124,28 +110,20 @@ export default function CityWeather() {
                 </div>
                 <div className="col-1"></div>
               </div>
-              <div
-
-              >
-                <div
-                  className="col-4 weather-grp2"
-            
-                >
+              <div>
+                <div className="col-4 weather-grp2">
                   <div>Pressure: {cityWeatherData.main.pressure} hPa</div>
                   <div>Humidity: {cityWeatherData.main.humidity}%</div>
                   <div>Visibility: {cityWeatherData.visibility}</div>
                 </div>
-                <div
-                  className="col-4 weather-grp2"
-
-                >
+                <div className="col-4 weather-grp2">
                   <span>&#x27B6;</span> {/**&#x27A4; */}
                   <p>
                     {cityWeatherData.wind.speed}m/s {cityWeatherData.wind.deg}{" "}
                     deg
                   </p>
                 </div>
-                <div className="col-4 sun-rise-set" >
+                <div className="col-4 sun-rise-set">
                   <div>
                     Sunrise :{" "}
                     {formatTime(
