@@ -2,21 +2,22 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../../style/style.css";
 import { useState, useEffect } from "react";
 import { fetchWeather } from "../../services/services";
-import WeatherCard from "./weatherCard";
-import {cityCodes} from "../../constants/constant";
+import WeatherCard from "./WeatherCard";
+import getCityCodes from "../../utils/CityCodeUtils";
+import cityData from "../../assets/cities.json";
+import './index.css'
 const WeatherDashboard = () => {
   const [Weather, setWeather] = useState("");
   const [isLoading, setIsloading] = useState(true);
-
-
+  const cityCodes = getCityCodes(cityData);
   const loadData = async () => {
-    
     let ids = cityCodes.join(",");
     let cachedData = localStorage.getItem("weatherData");
+
     let jsonData = JSON.parse(cachedData);
-    
+
     if (
-      jsonData &&
+      Array.isArray(jsonData.data)&&
       parseInt(jsonData.cachedTime) + 5 * 60 >
         Math.floor(new Date().getTime() / 1000)
     ) {
@@ -39,8 +40,8 @@ const WeatherDashboard = () => {
   };
   useEffect(() => {
     loadData();
+    console.log('weather' ,Weather)
   }, []);
-
 
   if (isLoading) return <div className="Loading">Loading...</div>;
   if (Weather === "") {
@@ -52,7 +53,7 @@ const WeatherDashboard = () => {
         <div className="row">
           {Weather &&
             Weather.map((city, index) => (
-              <WeatherCard city={city}  index={index}/>
+              <WeatherCard city={city} index={index} key={city.id} />
             ))}
         </div>
       </div>

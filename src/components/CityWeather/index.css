@@ -1,0 +1,42 @@
+.button-style {
+    width: 10%;
+    width: 10%;
+    font-size: 50px;
+    color: white;
+    border: none;
+    background: none;
+}
+.weather-view{
+  background-color: rgb(56, 142, 231);
+   color: white;
+   margin-top: 30px;
+   
+}
+.desc-img-view{
+ height: auto;
+  width: 100%;
+}
+.desc-img-view img{
+   width:auto;
+}
+.temp-view{
+   margin-left: 5px;
+   border-left: solid 1px white;
+}
+.desc{
+  width: 100%
+}
+.sun-rise-set{
+ text-align: right
+}
+.weather-grp2{
+   border-right: solid 1px white;
+}
+.weather-sub{
+   background-color: rgba(0,0,0,0.8);
+   color: whitesmoke;
+   padding: 30px;
+}
+.changingbg{
+
+}
