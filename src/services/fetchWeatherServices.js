@@ -1,7 +1,7 @@
 const fetchWeather = async (ids) => {
   const apiKey = process.env.REACT_APP_WEATHERAPPID;
   console.log(apiKey);
-  
+
   try {
 
     let url = `https://api.openweathermap.org/data/2.5/group?id=${ids}&units=metric&appid=${apiKey}`;

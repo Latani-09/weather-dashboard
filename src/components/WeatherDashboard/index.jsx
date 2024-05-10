@@ -1,10 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
-import { fetchWeather } from "../../services/services";
+import { fetchWeather } from "../../services/fetchWeatherServices";
 import WeatherCard from "./WeatherCard";
 import getCityCodes from "../../utils/CityCodeUtils";
 import cityData from "../../assets/cities.json";
 import "./index.css";
+import WeatherModel from "../../models/Weather";
 const WeatherDashboard = () => {
   const [Weather, setWeather] = useState("");
   const [isLoading, setIsloading] = useState(true);
@@ -14,18 +15,22 @@ const WeatherDashboard = () => {
     let cachedData = localStorage.getItem("weatherData");
 
     let jsonData = JSON.parse(cachedData);
-
     if (
-      Array.isArray(jsonData.data) &&
+      jsonData&&Array.isArray(jsonData.data) &&
       parseInt(jsonData.cachedTime) + 5 * 60 >
         Math.floor(new Date().getTime() / 1000)
     ) {
       console.log("weather data ", jsonData.data);
-      // const weatherData = jsonData.data.map(item => new WeatherModel(item));
-      setWeather(jsonData.data);
+
+      const weatherData = jsonData.data;
+      setWeather(weatherData);
       setIsloading(false);
     } else {
-      let weatherData = await fetchWeather(ids);
+      let weatherDataReceived = await fetchWeather(ids);
+      if (Array.isArray(weatherDataReceived)){
+      console.log('received',weatherDataReceived )
+      const weatherData = weatherDataReceived.map(item => new WeatherModel(item));
+      
       if (weatherData) {
         localStorage.setItem(
           "weatherData",
@@ -38,7 +43,9 @@ const WeatherDashboard = () => {
         setIsloading(false);
       }
     }
-  };
+    else {setIsloading(false);
+    return(<div className="Loading">Error fetching data</div>)}
+  };}
   useEffect(() => {
     loadData();
     console.log("weather", Weather);

@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import { formatTime, getDateTime } from "../../utils/DateTimeHelper";
 import { colors } from "../../constants/constant";
 import "./index.css";
 
 const WeatherCard = ({ city, index }) => {
-
+  console.log("city", city);
   return (
     <>
       <div className="col-lg-5 col-md-5 col-sm-11 col-11  weather-card">
@@ -12,36 +11,32 @@ const WeatherCard = ({ city, index }) => {
           <Link to={`cityWeather/${city.id}`}>
             <div className="card-main">
               <div
-                className="row card-cover"
-                style={{
-                  background: `linear-gradient( ${
-                    colors[index % 5]
-                  } 10%,rgba(255, 255, 255, 0.1) 90%)`,
-                }}
+                className={`row card-cover gradient-color-${(index % 5) + 1}`}
               >
                 <div className="col-md-7">
-                  <div className="row weatherEntry">
-                    <h4>{city.name + "," + city.sys.country}</h4>
+                  <div className="row weather-entry">
+                    <h4>{city.name + "," + city.country}</h4>
                   </div>
-                  <div className="row weatherEntry">
-                    <p>{getDateTime(city.dt)}</p>
+                  <div className="row weather-entry">
+                    <p>{city.time}</p>
                   </div>
 
-                  <div className="row weatherEntry">
+                  <div className="row weather-desc">
+                    <div className="col-2"></div>
                     <div className="col-4">
                       <img
-                        src={`http://openweathermap.org/img/wn/${city.weather[0].icon}.png`}
+                        src={`http://openweathermap.org/img/wn/${city.weatherIcon}.png`}
                         alt="weather description"
                       ></img>
                     </div>
-                    <div className="col-8">
-                      <h6>{city.weather[0].description}</h6>
+                    <div className="col-6">
+                      <h6>{city.description}</h6>
                     </div>
                   </div>
                 </div>
                 <div className="col-md-5">
                   <div className="row card-temp">
-                    <h1>{String(city.main.temp).split(".")[0] + "\u2103"}</h1>
+                    <h1>{String(city.temperature) + "\u2103"}</h1>
                   </div>
                 </div>
               </div>
@@ -52,10 +47,10 @@ const WeatherCard = ({ city, index }) => {
           <div className="col-md-4 col-sm-4 sub-grp-1 ">
             <div className="row">
               <div className="col-md-11 col-sm-11  ">
-                Pressure: {city.main.pressure} hPa
+                Pressure: {city.pressure} hPa
               </div>
               <div className="col-md-11 col-sm-11 ">
-                Humidity: {city.main.humidity}%
+                Humidity: {city.humidity}%
               </div>
               <div className="col-md-11 col-sm-11 ">
                 Visibility: {city.visibility}
@@ -65,16 +60,12 @@ const WeatherCard = ({ city, index }) => {
           <div className="col-md-4 col-sm-4 wind-style">
             <span>&#x27B6;</span> {/**&#x27A4; */}
             <p>
-              <span>{city.wind.speed}m/s</span> <span>{city.wind.deg} deg</span>
+              <span>{city.windSpeed}m/s</span> <span>{city.direction} deg</span>
             </p>
           </div>
           <div className="col-md-4 col-sm-4 sun-rise-set">
-            <div className="row m-1">
-              Sunrise : {formatTime(city.sys.sunrise + city.sys.timezone)}
-            </div>
-            <div className="row m-1">
-              Sunset : {formatTime(city.sys.sunset + city.sys.timezone)}
-            </div>
+            <div className="row m-1">Sunrise : {city.sunrise}</div>
+            <div className="row m-1">Sunset : {city.sunset}</div>
           </div>
         </div>
       </div>

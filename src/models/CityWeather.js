@@ -1,12 +1,12 @@
 // WeatherModel.js
 import { formatTime, getDateTime } from "../utils/DateTimeHelper";
-class WeatherModel {
+class CityWeatherModel {
   constructor(data) {
     this.id = data.id;
     this.name = data.name;
     this.time = getDateTime(data.dt);
     this.country = data.country;
-    this.temperature = String(data.main.temp).split(".")[0];
+    this.temperature = String(cityWeatherData.main.temp).split(".")[0];
     this.pressure = data.main.pressure;
     this.humidity = data.main.humidity;
     this.visibility = data.visibility;
@@ -23,4 +23,4 @@ class WeatherModel {
   }
 }
 
-export default WeatherModel;
+export default CityWeatherModel;

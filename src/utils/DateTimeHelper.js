@@ -5,6 +5,7 @@ function formatTime(timeStamp) {
   // minutes
   let minutes = String(dateObj.getUTCMinutes()).padStart(2, "0");
   let t = Math.floor(hours / 12) === 1 ? "pm" : "am"; //   am/pm)
+  console.log(String(hours % 12).padStart(2, "0") + "." + minutes + t);
   return String(hours % 12).padStart(2, "0") + "." + minutes + t;
 }
 function getDateTime(timeStamp) {

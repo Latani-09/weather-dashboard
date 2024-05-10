@@ -1,57 +1,61 @@
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { fetchWeather } from "../../services/services";
-import { formatTime, getDateTime } from "../../utils/DateTimeHelper";
+import { fetchWeather } from "../../services/fetchWeatherServices";
+import WeatherModel from "../../models/Weather";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 export default function CityWeather() {
   const [cityWeatherData, setCityWeather] = useState();
   const [isLoading, setIsloading] = useState(true);
   const id = useParams();
-  const loadCityData = async () => {
-    let storageId = "weatherData" + id.CityID; //to store weather data for current city
-    let jsonData = null;
-    let cachedData = localStorage.getItem("weatherData"); //get data from cached list data
-    let cachedcityData = localStorage.getItem(storageId); //get data from chacehd city data
-    if (cachedcityData) {
-      jsonData = JSON.parse(cachedcityData);
-    } else if (cachedData) {
-      jsonData = JSON.parse(cachedData);
+  const loadCityData = async (id) => {
+    const storageId = "weatherData" + id.CityID;
+    const cachedListData = JSON.parse(localStorage.getItem("weatherData"));
+    const cachedCityData = JSON.parse(localStorage.getItem(storageId));
+
+    if (cachedCityData && isFreshData(cachedCityData)) {
+      setCityWeather(cachedCityData.data);
+      setIsloading(false);
+      return;
+    } else if (cachedListData && isFreshData(cachedListData)) {
+      const cityData = cachedListData.data.find(
+        (city) => city.id === id.CityID
+      );
+      if (cityData) {
+        setCityWeather(cityData);
+        setIsloading(false);
+        return;
+      }
     }
 
-    //if cached data within 5min found then set with cached data;
-    if (
-      jsonData != null &&
-      parseInt(jsonData.cachedTime) + 5 * 60 >
-        Math.floor(new Date().getTime() / 1000)
-    ) {
-      jsonData.data.forEach((city) => {
-        if (city.id === id.CityID) {
-          setCityWeather(city);
-          setIsloading(false);
-        }
-      });
-    } else {
-      localStorage.removeItem("weatherData");
-      localStorage.removeItem(storageId);
-
-      let cityWeatherData = await fetchWeather(id.CityID);
-      if (cityWeatherData != null) {
+    try {
+      const cityWeatherDataReceived = await fetchWeather(id.CityID);
+      const weatherData = new WeatherModel(cityWeatherDataReceived[0]);
+      if (weatherData) {
         localStorage.setItem(
           storageId,
           JSON.stringify({
             cachedTime: Math.floor(new Date().getTime() / 1000).toString(),
-            data: cityWeatherData,
+            data: weatherData,
           })
         );
-
-        setCityWeather(cityWeatherData[0]);
+        setCityWeather(weatherData);
         setIsloading(false);
       }
+    } catch (error) {
+      console.error("Error loading city data:", error);
+      // Handle error appropriately (e.g., display error message to the user)
     }
   };
+
+  const isFreshData = (data) => {
+    return (
+      parseInt(data.cachedTime) + 5 * 60 >
+      Math.floor(new Date().getTime() / 1000)
+    );
+  };
   useEffect(() => {
-    loadCityData();
+    loadCityData(id);
   }, []);
   if (isLoading) {
     return <div>Loading...</div>;
@@ -62,84 +66,67 @@ export default function CityWeather() {
           <div className="row ">
             <div className="col sm-12 col-md-10 weather-view">
               <Link to="/">
-                <div className="row">
+                <div className="row  weather-main ">
                   <button className="button-style"> &larr;</button>
                 </div>
               </Link>
-              <div className="row">
-                <h2>
-                  {cityWeatherData.name + "," + cityWeatherData.sys.country}
-                </h2>
+              <div className="row  weather-main ">
+                <h2>{cityWeatherData.name + "," + cityWeatherData.country}</h2>
               </div>
-              <div className="row">
-                <p>{getDateTime(cityWeatherData.dt)}</p>
+              <div className="row  weather-main ">
+                <p>{cityWeatherData.time}</p>
               </div>
 
-              <div className="row ">
+              <div className="row  weather-main  ">
                 <div className="col-1"></div>
                 <div className="col-5 ">
                   <div className="row ">
                     <div className="col-12 desc-img-view">
                       <img
-                        src={`http://openweathermap.org/img/wn/${cityWeatherData.weather[0].icon}.png`}
+                        src={`http://openweathermap.org/img/wn/${cityWeatherData.weatherIcon}.png`}
                         alt="weather icon"
                       ></img>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-12 desc">
-                      <p>{cityWeatherData.weather[0].description}</p>
+                      <p>{cityWeatherData.description}</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="col-5 temp-view">
-                  <h1>
-                    {String(cityWeatherData.main.temp).split(".")[0] + "\u2103"}
-                  </h1>
+                  <h1>{cityWeatherData.temperature}</h1>
                   <div>
                     Temp min:
-                    {String(cityWeatherData.main.temp_min).split(".")[0] +
-                      "\u2103"}
+                    {cityWeatherData.temp_min + "\u2103"}
                   </div>
                   <div>
                     Temp max:
-                    {String(cityWeatherData.main.temp_max).split(".")[0] +
-                      "\u2103"}
+                    {cityWeatherData.temp_max + "\u2103"}
                   </div>
                 </div>
                 <div className="col-1"></div>
               </div>
-              <div>
-                <div className="col-4 weather-grp2">
-                  <div>Pressure: {cityWeatherData.main.pressure} hPa</div>
-                  <div>Humidity: {cityWeatherData.main.humidity}%</div>
+              <div className="row weather-sub ">
+                <div className="col-md-4 col-sm-4  weather-grp2">
+                  <div>Pressure: {cityWeatherData.pressure} hPa</div>
+                  <div>Humidity: {cityWeatherData.humidity}%</div>
                   <div>Visibility: {cityWeatherData.visibility}</div>
                 </div>
-                <div className="col-4 weather-grp2">
+                <div className="col-md-4 col-sm-4  weather-grp2">
                   <span>&#x27B6;</span> {/**&#x27A4; */}
                   <p>
-                    {cityWeatherData.wind.speed}m/s {cityWeatherData.wind.deg}{" "}
-                    deg
+                    {cityWeatherData.windSpeed}m/s{" "}
+                    {cityWeatherData.windDirection} deg
                   </p>
                 </div>
-                <div className="col-4 sun-rise-set">
-                  <div>
-                    Sunrise :{" "}
-                    {formatTime(
-                      cityWeatherData.sys.sunrise + cityWeatherData.sys.timezone
-                    )}
-                  </div>
-                  <div>
-                    Sunset :{" "}
-                    {formatTime(
-                      cityWeatherData.sys.sunset + cityWeatherData.sys.timezone
-                    )}
-                  </div>
+                <div className="col-md-4 col-sm-4 sun-rise-set">
+                  <div>Sunrise : {cityWeatherData.sunrise}</div>
+                  <div>Sunset : {cityWeatherData.sunset}</div>
                 </div>
               </div>
             </div>
-            <div className="col-md-1"></div>
           </div>
         </div>
       </>
