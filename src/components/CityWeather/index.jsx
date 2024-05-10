@@ -24,7 +24,7 @@ export default function CityWeather() {
       return;
     } else if (cachedListData && isFreshData(cachedListData)) {
       const cityData = cachedListData.data.find(
-        (city) => (city.id).toString() === id.CityID
+        (city) => city.id.toString() === id.CityID
       );
       if (cityData) {
         setCityWeather(cityData);
