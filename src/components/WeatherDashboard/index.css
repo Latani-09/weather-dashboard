@@ -29,8 +29,13 @@
 
 .sun-rise-set {
   text-align: center;
-}
 
+}
+.sub-grp-1 {
+  border-right: solid 1px white;
+
+  margin: 0 auto;
+}
 .wind-style {
   border-right: solid 2px white;
 }
@@ -56,12 +61,7 @@
 
 }
 
-.sub-grp-1 {
-  border-right: solid 1px white;
 
-  display: table;
-  margin: 0 auto;
-}
 
 a {
   text-decoration: none;

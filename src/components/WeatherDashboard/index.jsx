@@ -14,7 +14,7 @@ const WeatherDashboard = () => {
 
   const loadData = async () => {
     let ids = cityCodes.join(",");
-    let cachedData = localStorage.getItem(storageKey);
+    let cachedData = sessionStorage.getItem(storageKey);
 
     let jsonData = JSON.parse(cachedData);
     if (
@@ -34,7 +34,7 @@ const WeatherDashboard = () => {
         );
 
         if (weatherData) {
-          localStorage.setItem(
+          sessionStorage.setItem(
             storageKey,
             JSON.stringify({
               cachedTime: Math.floor(new Date().getTime() / 1000).toString(),
