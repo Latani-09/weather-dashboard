@@ -75,12 +75,30 @@ const WeatherDashboard = () => {
   return (
     <div>
       <div className=" container dashboard">
-        <div className="row">
+        <div className="addcitybar row ">
+        
+          <div className="input-container" >
+            <input
+              placeholder="Enter a city"
+              
+            ></input>
+            <button
+              
+            >
+              Add City
+            </button>
+          </div>
+        
+        </div>
+
+        <div className="container flex-col">
           {Weather &&
             Weather.map((city, index) => (
+               <div className="card-wrapper"> 
               <WeatherCard city={city} index={index} key={city.id} />
+              </div>
             ))}
-        </div>
+            </div>
       </div>
     </div>
   );

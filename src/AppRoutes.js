@@ -6,6 +6,7 @@ const AppRoutes = [
   {
     path: "/cityWeather/:CityID",
     element: <CityWeather />,
+    
   },
 ];
 export default AppRoutes;

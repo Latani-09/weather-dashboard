@@ -3,73 +3,42 @@ import { useState, useEffect } from "react";
 import { fetchWeather } from "../../services/fetchWeatherServices";
 import WeatherModel from "../../models/Weather";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useLocation } from "react-router-dom/dist";
 import "./index.css";
-import {
-  cacheExpirationTimeMin,
-  storageKey,
-  openWeatherIconURL,
-} from "../../constants/constant";
+import { openWeatherIconURL } from "../../constants/constant";
 export default function CityWeather() {
   const [cityWeatherData, setCityWeather] = useState();
   const [isLoading, setIsloading] = useState(true);
+  // get bg-color from link in  weather Card
+  const location = useLocation();
+  const { color } = location.state;
   const id = useParams();
+
   const loadCityData = async (id) => {
-    const storageId_city = storageKey + id.CityID;
-    const cachedListData = JSON.parse(sessionStorage.getItem(storageKey));
-    const cachedCityData = JSON.parse(sessionStorage.getItem(storageId_city));
-
-    if (cachedCityData && isFreshData(cachedCityData)) {
-      setCityWeather(cachedCityData.data);
-      setIsloading(false);
-      return;
-    } else if (cachedListData && isFreshData(cachedListData)) {
-      const cityData = cachedListData.data.find(
-        (city) => city.id.toString() === id.CityID
-      );
-      if (cityData) {
-        setCityWeather(cityData);
-        setIsloading(false);
-        return;
-      }
-    }
-
     try {
       const cityWeatherDataReceived = await fetchWeather(id.CityID);
       const weatherData = new WeatherModel(cityWeatherDataReceived[0]);
       if (weatherData) {
-        sessionStorage.setItem(
-          storageId_city,
-          JSON.stringify({
-            cachedTime: Math.floor(new Date().getTime() / 1000).toString(),
-            data: weatherData,
-          })
-        );
         setCityWeather(weatherData);
         setIsloading(false);
       }
     } catch (error) {
       console.error("Error loading city data:", error);
-      // Handle error appropriately (e.g., display error message to the user)
     }
   };
 
-  const isFreshData = (data) => {
-    return (
-      parseInt(data.cachedTime) + cacheExpirationTimeMin >
-      Math.floor(new Date().getTime() / 1000)
-    );
-  };
   useEffect(() => {
     loadCityData(id);
   }, []);
+
   if (isLoading) {
     return <div>Loading...</div>;
   } else {
     return (
       <>
         <div className="container">
-          <div className="row ">
-            <div className="col sm-12 col-md-10 weather-view">
+          <div className="row city-container">
+            <div className={`col sm-12 col-md-10 weather-view bg-color-${color} `}>
               <Link to="/">
                 <div className="row  weather-main ">
                   <button className="button-style"> &larr;</button>
@@ -87,14 +56,10 @@ export default function CityWeather() {
                 <div className="col-5 ">
                   <div className="row ">
                     <div className="col-12 desc-img-view">
-                      <img
-                        src={
-                          openWeatherIconURL +
-                          cityWeatherData.weatherIcon +
-                          ".png"
-                        }
+                      <img 
+                        src={openWeatherIconURL +cityWeatherData.weatherIcon +".png"}
                         alt="weather icon"
-                      ></img>
+                      />
                     </div>
                   </div>
                   <div className="row">
@@ -124,7 +89,7 @@ export default function CityWeather() {
                   <div>Visibility: {cityWeatherData.visibility}</div>
                 </div>
                 <div className="col-md-4 col-sm-4  weather-grp2">
-                  <span>&#x27B6;</span> {/**&#x27A4; */}
+                  <span>&#x27B6;</span>
                   <p>
                     {cityWeatherData.windSpeed}m/s{" "}
                     {cityWeatherData.windDirection} deg
