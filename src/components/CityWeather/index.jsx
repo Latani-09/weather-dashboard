@@ -15,8 +15,8 @@ export default function CityWeather() {
   const id = useParams();
   const loadCityData = async (id) => {
     const storageId_city = storageKey + id.CityID;
-    const cachedListData = JSON.parse(localStorage.getItem(storageKey));
-    const cachedCityData = JSON.parse(localStorage.getItem(storageId_city));
+    const cachedListData = JSON.parse(sessionStorage.getItem(storageKey));
+    const cachedCityData = JSON.parse(sessionStorage.getItem(storageId_city));
 
     if (cachedCityData && isFreshData(cachedCityData)) {
       setCityWeather(cachedCityData.data);
@@ -37,7 +37,7 @@ export default function CityWeather() {
       const cityWeatherDataReceived = await fetchWeather(id.CityID);
       const weatherData = new WeatherModel(cityWeatherDataReceived[0]);
       if (weatherData) {
-        localStorage.setItem(
+        sessionStorage.setItem(
           storageId_city,
           JSON.stringify({
             cachedTime: Math.floor(new Date().getTime() / 1000).toString(),
