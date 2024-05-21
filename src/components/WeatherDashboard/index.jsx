@@ -1,46 +1,31 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
-import { fetchWeather } from "../../services/fetchWeatherServices";
+import { fetchWeather ,getCachedData,setCachewithTime} from "../../services/fetchWeatherServices";
 import WeatherCard from "./WeatherCard";
 import getCityCodes from "../../utils/CityCodeUtils";
 import cityData from "../../assets/cities.json";
 import "./index.css";
 import WeatherModel from "../../models/Weather";
-import { storageKey, cacheExpirationTimeMin } from "../../constants/constant";
+import { storageKey } from "../../constants/constant";
 const WeatherDashboard = () => {
   const [Weather, setWeather] = useState("");
   const [isLoading, setIsloading] = useState(true);
   const cityCodes = getCityCodes(cityData);
-
   const loadData = async () => {
     let ids = cityCodes.join(",");
-    let cachedData = sessionStorage.getItem(storageKey);
-
-    let jsonData = JSON.parse(cachedData);
-    if (
-      jsonData &&
-      Array.isArray(jsonData.data) &&
-      parseInt(jsonData.cachedTime) + cacheExpirationTimeMin >
-        Math.floor(new Date().getTime() / 1000)
-    ) {
-      const weatherData = jsonData.data;
-      setWeather(weatherData);
-      setIsloading(false);
-    } else {
+    let cachedData=getCachedData(storageKey);
+    if (cachedData.isFresh){
+       setWeather(cachedData.data)
+       setIsloading(false)
+    }
+     else {
       let weatherDataReceived = await fetchWeather(ids);
       if (Array.isArray(weatherDataReceived)) {
         const weatherData = weatherDataReceived.map(
           (item) => new WeatherModel(item)
         );
-
         if (weatherData) {
-          sessionStorage.setItem(
-            storageKey,
-            JSON.stringify({
-              cachedTime: Math.floor(new Date().getTime() / 1000).toString(),
-              data: weatherData,
-            })
-          );
+          setCachewithTime(storageKey,weatherData)
           setWeather(weatherData);
           setIsloading(false);
         }
@@ -75,30 +60,24 @@ const WeatherDashboard = () => {
   return (
     <div>
       <div className=" container dashboard">
+
         <div className="addcitybar row ">
-        
           <div className="input-container" >
-            <input
-              placeholder="Enter a city"
-              
-            ></input>
-            <button
-              
-            >
+            <input placeholder="Enter a city"/>
+            <button>
               Add City
             </button>
           </div>
-        
         </div>
 
         <div className="container flex-col">
-          {Weather &&
-            Weather.map((city, index) => (
+          {Weather && Weather.map((city, index) => (
                <div className="card-wrapper"> 
-              <WeatherCard city={city} index={index} key={city.id} />
+                  <WeatherCard city={city} index={index} key={city.id} />
               </div>
-            ))}
-            </div>
+          ))}
+        </div>
+
       </div>
     </div>
   );
