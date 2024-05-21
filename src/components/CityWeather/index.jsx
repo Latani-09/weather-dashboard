@@ -102,11 +102,18 @@ export default function CityWeather() {
                   <div>Visibility: {cityWeatherData.visibility}</div>
                 </div>
                 <div className="col-md-4 col-sm-4  weather-grp2">
-                  <span>&#x27B6;</span>
+                <div>
+                <img
+                  src="../direction2.png"
+                  alt="arrow symbol"
+                  height="40px"
+                  width="auto"
+                />
                   <p>
                     {cityWeatherData.windSpeed}m/s{" "}
                     {cityWeatherData.windDirection} deg
                   </p>
+                  </div>
                 </div>
                 <div className="col-md-4 col-sm-4 sun-rise-set">
                   <div>Sunrise : {cityWeatherData.sunrise}</div>

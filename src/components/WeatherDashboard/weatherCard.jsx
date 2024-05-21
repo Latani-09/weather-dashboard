@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import "./index.css";
 import { OpenWeatherIconURL } from "../../constants/constant";
 
+
 const WeatherCard = ({ city, index }) => {
   const colorIndex = (index % 5) + 1;
   return (
