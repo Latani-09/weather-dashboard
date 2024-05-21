@@ -1,104 +1,14 @@
-.card-temp {
-  align-content: center;
-  height: 100%;
-  font-family: "Times New Roman", Times, serif;
-}
 
-.card-frame {
-  position: relative;
-  min-height: max-content;
-  text-decoration: none;
-  padding: 0px 0px 0px 0px;
-}
-
+/*style weather dashboard */
 .container.flex-col {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-}
-
-@media SCREEN and (min-width: 768px) {
-  .card-wrapper {
-    flex: 1 1 45%;
-    max-width: 45%;
-    padding: 10px;
-  }
-  @media screen and (max-width: 768px) {
-
-
-}
-}
-
-.card-wrapper {
-  flex: 1 1 100%;
-  padding: 10px;
-}
-
-.card-main {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.card-main {
-  width: 100%;
-  height: 100%;
-  background-image: url("../../../public/cardbg.png");
-  background-size: cover;
-  background-position: center;
-}
-
-.cardCover {
-  margin: 0px 0px 0px 0px;
-  padding: 0px 0px 0px 0px;
-  width: 100%;
-  height: 100%;
-}
-
-.sun-rise-set {
-  text-align: center;
-}
-
-.sub-grp-1 {
-  border-right: solid 1px white;
-
-  margin: 0 auto;
-}
-
-.wind-style {
-  border-right: solid 2px white;
-}
-
-.weather-card {
-  margin: 10px 10px 10px 10px;
-}
-
-.dashboard {
   box-sizing: border-box;
 }
 
-.weather-entry {
-  margin: 10px 0px 0px 0px;
-  padding-top: 10px;
-}
 
-.weather-sub {
-  background-color: rgba(5, 6, 66, 0.96);
-  color: whitesmoke;
-  padding: 10px;
-}
-
-a {
-  text-decoration: none;
-  color: white;
-  padding-left: 0px;
-}
-
-a:hover {
-  color: rgb(172, 194, 197);
-}
-
-
+/*style add city bar*/
 
 .addcitybar {
   margin-bottom: 3rem;
@@ -117,7 +27,9 @@ a:hover {
   background-color: rgb(0, 0, 0);
   color: white;
   border: none;
+  border-radius: 5px;
   padding: 10px;
+  margin-right: -5px;
   width: 70%;
 }
 
@@ -130,25 +42,153 @@ a:hover {
   width: 30%;
 }
 
+
+
+/*style weather card */
+
+
+.card-wrapper {
+  flex: 1 1 100%;
+  margin: 10px 10px 10px 10px;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  
+}
+.card-frame {
+  position: relative;
+  min-height: max-content;
+  text-decoration: none;
+  padding: 0px 0px 0px 0px;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  
+}
+a {
+  text-decoration: none;
+  color: white;
+  padding-left: 0px;
+}
+
+a:hover {
+  color: rgb(172, 194, 197);
+}
+
+/*style weather card upper part*/
+.card-close div{
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 5px;
+}
+.card-main {
+
+  width: 100%;
+  height: 100%;
+  background-image: url("../../../public/cardbg.png");
+  background-size: cover;
+  background-position: center;
+
+
+  
+}
+
+.card-temp {
+  align-self: center;
+  height: 100%;
+}
+
+.weather-entry {
+  padding-top: 5px;
+}
+.weather-desc {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:space-around;
+}
+.weather-desc div{
+  flex:1 1 30%;
+}
+
+/* style for bottom part of weather card*/
+.weather-sub {
+  background-color:rgb(45, 50, 64);
+  color: whitesmoke;
+  padding: 10px;
+  border-bottom-left-radius:5px;
+  border-bottom-right-radius:5px;
+  font-size:small;
+}
+
+
+.sub-grp-1 {
+  border-bottom: solid 1px white;
+}
+.wind-style {
+  border-bottom: solid 2px white;
+  
+}
+.sub-grp-1 ,.wind-style,.sun-rise-set{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.sub-grp-1 div p ,.wind-style div p,.sun-rise-set div p{
+  text-align: left;
+  margin-bottom: 5px;
+  font-size: small;
+}
+
+@media screen and (min-width:768px){
+  .card-wrapper {
+    flex: 1 1 45%;
+
+    padding: 10px;
+    margin: 10px 20px 10px 20px;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+   
+  }
+
+
+
+  
+}
+@media SCREEN and (min-width: 576px) {
+
+  .sub-grp-1 {
+    border-right: solid 1px white;
+    border-bottom: none;
+  
+  }
+  
+  .wind-style {
+    border-right: solid 2px white;
+    border-bottom: none;
+  }
+
+}
+
+
+
+
+
 .gradient-color-1 {
-  background: linear-gradient(rgb(156, 58, 58) 10%, rgb(156, 58, 58, 0.3) 90%);
+  background: linear-gradient(to top,rgb(56, 110, 231) 10%,
+      rgb(56, 110, 231, 0.1) 90%);
 }
 
 .gradient-color-2 {
-  background: linear-gradient(rgb(222, 148, 90) 10%,
-      rgb(222, 148, 90, 0.3) 90%);
+  background: linear-gradient(to top,rgb(98, 73, 204) 10%, rgb(98, 73, 204, 0.1) 90%);
 }
-
 .gradient-color-3 {
-  background: linear-gradient(rgb(64, 182, 129) 10%,
+  background: linear-gradient(to top,rgb(64, 182, 129) 10%,
       rgb(64, 182, 129, 0.3) 90%);
 }
 
 .gradient-color-4 {
-  background: linear-gradient(rgb(56, 110, 231) 10%,
-      rgb(56, 110, 231, 0.1) 90%);
+  background: linear-gradient(to top,rgb(222, 148, 90) 10%,
+      rgb(222, 148, 90, 0.3) 90%);
 }
 
 .gradient-color-5 {
-  background: linear-gradient(rgb(98, 73, 204) 10%, rgb(98, 73, 204, 0.1) 90%);
+  background: linear-gradient(to top,rgb(156, 58, 58) 10%, rgb(156, 58, 58, 0.3) 90%);
 }

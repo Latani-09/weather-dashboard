@@ -1,14 +1,18 @@
 import { Link, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { fetchWeather } from "../../services/fetchWeatherServices";
+import { useState, useEffect, useRef } from "react";
+import { fetchWeather } from "../../services/weatherService";
 import WeatherModel from "../../models/Weather";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocation } from "react-router-dom/dist";
 import "./index.css";
-import { openWeatherIconURL } from "../../constants/constant";
+import { OpenWeatherIconURL } from "../../constants/constant";
 export default function CityWeather() {
   const [cityWeatherData, setCityWeather] = useState();
   const [isLoading, setIsloading] = useState(true);
+  const isDevelopmentRun =
+    !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+  const isMountedRef = useRef(!isDevelopmentRun);
+
   // get bg-color from link in  weather Card
   const location = useLocation();
   const { color } = location.state;
@@ -23,11 +27,14 @@ export default function CityWeather() {
         setIsloading(false);
       }
     } catch (error) {
-      console.error("Error loading city data:", error);
     }
   };
 
   useEffect(() => {
+    if (!isMountedRef.current) {
+      isMountedRef.current = true;
+      return undefined;
+    }
     loadCityData(id);
   }, []);
 
@@ -38,7 +45,9 @@ export default function CityWeather() {
       <>
         <div className="container">
           <div className="row city-container">
-            <div className={`col sm-12 col-md-10 weather-view bg-color-${color} `}>
+            <div
+              className={`col sm-12 col-md-10 weather-view bg-color-${color} `}
+            >
               <Link to="/">
                 <div className="row  weather-main ">
                   <button className="button-style"> &larr;</button>
@@ -56,8 +65,12 @@ export default function CityWeather() {
                 <div className="col-5 ">
                   <div className="row ">
                     <div className="col-12 desc-img-view">
-                      <img 
-                        src={openWeatherIconURL +cityWeatherData.weatherIcon +".png"}
+                      <img
+                        src={
+                          OpenWeatherIconURL +
+                          cityWeatherData.weatherIcon +
+                          ".png"
+                        }
                         alt="weather icon"
                       />
                     </div>
@@ -70,7 +83,7 @@ export default function CityWeather() {
                 </div>
 
                 <div className="col-5 temp-view">
-                  <h1>{cityWeatherData.temperature}</h1>
+                  <h1>{cityWeatherData.temperature + "\u2103"}</h1>
                   <div>
                     Temp min:
                     {cityWeatherData.temp_min + "\u2103"}

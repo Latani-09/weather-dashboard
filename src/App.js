@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       <h5 className="header">
-        <img src='./icons/04d.png' alt="clouds"/>Weather App
+        <img src='icons/04d.png' alt="clouds"/>Weather App
       </h5>
       <Routes>
         {AppRoutes.map((route, index) => {

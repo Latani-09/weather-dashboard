@@ -1,31 +1,33 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState, useEffect } from "react";
-import { fetchWeather ,getCachedData,setCachewithTime} from "../../services/fetchWeatherServices";
+import { useState, useEffect, useRef } from "react";
+import {fetchWeather,getCachedData,setCachewithTime} from "../../services/weatherService";
 import WeatherCard from "./WeatherCard";
 import getCityCodes from "../../utils/CityCodeUtils";
 import cityData from "../../assets/cities.json";
 import "./index.css";
 import WeatherModel from "../../models/Weather";
-import { storageKey } from "../../constants/constant";
+import { StorageKey } from "../../constants/constant";
+
 const WeatherDashboard = () => {
-  const [Weather, setWeather] = useState("");
+  const [Weather, setWeather] = useState([]);
   const [isLoading, setIsloading] = useState(true);
   const cityCodes = getCityCodes(cityData);
+  const isDevelopmentRun =!process.env.NODE_ENV || process.env.NODE_ENV === "development";
+  const isMountedRef = useRef(!isDevelopmentRun);
+
   const loadData = async () => {
     let ids = cityCodes.join(",");
-    let cachedData=getCachedData(storageKey);
-    if (cachedData.isFresh){
-       setWeather(cachedData.data)
-       setIsloading(false)
-    }
-     else {
+    let cachedData = getCachedData(StorageKey);
+    if (cachedData.isFresh) {
+      setWeather(cachedData.data);
+      setIsloading(false);
+    } else {
       let weatherDataReceived = await fetchWeather(ids);
       if (Array.isArray(weatherDataReceived)) {
         const weatherData = weatherDataReceived.map(
-          (item) => new WeatherModel(item)
-        );
+          (item) => new WeatherModel(item));
         if (weatherData) {
-          setCachewithTime(storageKey,weatherData)
+          setCachewithTime(StorageKey, weatherData);
           setWeather(weatherData);
           setIsloading(false);
         }
@@ -41,11 +43,16 @@ const WeatherDashboard = () => {
       }
     }
   };
+
   useEffect(() => {
+    if (!isMountedRef.current) {
+      isMountedRef.current = true;
+      return undefined;}
+
     loadData();
   }, []);
 
-  if (isLoading)
+  if (isLoading){
     return (
       <div>
         <div className=" container dashboard">
@@ -53,31 +60,24 @@ const WeatherDashboard = () => {
           <div className="Loading">Loading...</div>
         </div>
       </div>
-    );
-  if (Weather === "") {
-    return null;
-  }
+    );}
+
   return (
     <div>
       <div className=" container dashboard">
-
         <div className="addcitybar row ">
-          <div className="input-container" >
-            <input placeholder="Enter a city"/>
-            <button>
-              Add City
-            </button>
+          <div className="input-container">
+            <input placeholder="Enter a city" />
+            <button>Add City</button>
           </div>
         </div>
 
-        <div className="container flex-col">
-          {Weather && Weather.map((city, index) => (
-               <div className="card-wrapper"> 
-                  <WeatherCard city={city} index={index} key={city.id} />
-              </div>
-          ))}
+        <div className="container flex-col ">
+          {Weather &&
+            Weather.map((city, index) => (
+              <WeatherCard city={city} index={index} key={city.id} />
+            ))}
         </div>
-
       </div>
     </div>
   );

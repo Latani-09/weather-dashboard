@@ -19,7 +19,7 @@ class WeatherModel {
     this.weatherIcon = data.weather[0].icon;
     this.description = data.weather[0].description;
     this.temp_min = String(data.main.temp_min).split(".")[0];
-    this.temp_max = data.main.temp_max;
+    this.temp_max = String(data.main.temp_max).split(".")[0];
   }
 }
 
